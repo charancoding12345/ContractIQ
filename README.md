@@ -52,58 +52,32 @@ This tool is built for:
 
 :
 
-🧩 Prerequisites
+🧾 ContractIQ — Setup Guide
+📁 Directory Structure
+ContractIQ/
+│
+├── Backend/                    # FastAPI backend for OCR & clause analysis
+│   ├── app/
+│   │   ├── main.py             # API entry point
+│   │   ├── clause_analysis/    # Clause risk detection logic
+│   │   ├── ocr/                # OCR extraction (Tesseract + PyMuPDF)
+│   │   └── utils/              # Helper functions
+│   ├── requirements.txt        # Python dependencies
+│   ├── Dockerfile              # Backend Docker config
+│   ├── .env.example            # Example environment file
+│   └── tests/                  # Unit & integration tests
+│
+├── Frontend/
+│   └── contractiq/             # Next.js + Tailwind frontend
+│       ├── pages/              # Routes
+│       ├── components/         # UI components
+│       ├── public/             # Static assets
+│       └── package.json        # Frontend dependencies
+│
+└── docker-compose.yml          # Combined full-stack setup
 
-Before running ContractIQ, make sure you have the following installed:
-
-System Requirements
-
-Python 3.11+ — for the backend (FastAPI)
-
-Node.js 18+ — for the frontend (Next.js)
-
-Tesseract OCR — used for text extraction
-(Skip if you plan to run with Docker — it’s preinstalled inside the container)
-
-🧱 Installing Tesseract OCR (Local Only)
-🪟 Windows
-
-Download the Windows installer from the official Tesseract repo:
-👉 Tesseract for Windows (UB Mannheim Build)
-
-Run the installer and add tesseract.exe to your system PATH.
-🍎 macOS
-brew install tesseract
-🐧 Linux (Ubuntu/Debian)
-sudo apt update
-sudo apt install tesseract-ocr tesseract-ocr-eng
-⚙️ Environment Variables Setup
-
-ContractIQ uses an .env file in the Backend directory to configure runtime settings.
-
-Step 1: Create the .env file
-cd Backend
-copy .env.example .env    # On Windows
-# or
-cp .env.example .env      # On macOS/Linux
-Step 2: Edit your .env file
-
-Here’s a minimal example configuration:
-ENV=development
-PORT=8000
-
-Step 3: Add Tesseract path (if running locally)
-
-If you installed Tesseract manually, you need to specify where its tessdata files are stored.
-
-🪟 Windows
-TESSDATA_PREFIX=C:\Program Files\Tesseract-OCR\tessdata
-🐧 Linux/macOS
-TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00/tessdata
-💡 Note:
-You don’t need to set TESSDATA_PREFIX when using Docker — it’s already preconfigured in the image.
-
-▶️ Running the Backend (Local, with venv)
+⚙️ Backend Setup
+1️⃣ Install Dependencies
 cd Backend
 python -m venv venv
 .\venv\Scripts\activate     # Windows
@@ -111,25 +85,66 @@ python -m venv venv
 source venv/bin/activate    # macOS/Linux
 
 pip install -r requirements.txt
+
+2️⃣ Configure Environment
+
+Copy the example .env file:
+
+cp .env.example .env    # macOS/Linux
+# or
+copy .env.example .env  # Windows
+
+
+Then edit .env as needed:
+
+ENV=development
+PORT=8000
+
+
+If running locally and you installed Tesseract manually:
+
+Windows
+
+TESSDATA_PREFIX=C:\Program Files\Tesseract-OCR\tessdata
+
+
+Linux/macOS
+
+TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00/tessdata
+
+
+⚠️ Docker users: skip this — Tesseract is already installed in the image.
+
+3️⃣ Run the Server
 uvicorn app.main:app --reload --port 8000
-Backend will start on:
-👉 http://localhost:8000/docs
-▶️ Running the Frontend
+
+
+✅ Backend running at:
+
+REST API → http://localhost:8000
+
+Docs → http://localhost:8000/docs
+
+💻 Frontend Setup
+1️⃣ Install Dependencies
 cd Frontend/contractiq
 npm install
+
+2️⃣ Run the Dev Server
 npm run dev
-Frontend will start on:
-👉 http://localhost:3000
 
-🐳 Running Everything with Docker
 
-If you have Docker installed, you can start both frontend and backend together:
+✅ Frontend running at:
+http://localhost:3000
+
+🐳 Docker Setup (Full Stack)
+1️⃣ Build and Run
 docker compose up --build
 
-Backend → http://localhost:8000
+2️⃣ Access
 
-Frontend → http://localhost:3000
+Backend: http://localhost:8000/docs
 
-🧱 Docker images already include tesseract-ocr and tesseract-ocr-eng,
-so no manual setup is needed.
+Frontend: http://localhost:3000
 
+Docker automatically handles dependencies (Python, Node, and Tesseract).
