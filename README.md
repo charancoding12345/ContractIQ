@@ -52,166 +52,73 @@ This tool is built for:
 
 ---
 
-✅ Prerequisites
-
-Python 3.11+
+🧰 Prerequisites
 
 Node 18+ (for the frontend)
 
-Tesseract OCR installed (skip if using Docker)
+Tesseract OCR (skip this if you’re using Docker)
 
-Windows: install Tesseract and add tesseract.exe to PATH
+⚙️ Install Tesseract manually only for local (non-Docker) setups
 
-macOS: brew install tesseract
+Windows
 
-Linux: sudo apt-get install tesseract-ocr tesseract-ocr-eng
+Install Tesseract from https://github.com/UB-Mannheim/tesseract/wiki
+# Then add tesseract.exe to your PATH
 
-⚙️ Environment variables
 
-Create Backend/.env (or copy from .env.example) and set:
+macOS
 
-# Backend/.env
+brew install tesseract
+
+
+Linux (Ubuntu/Debian)
+
+sudo apt-get update
+sudo apt-get install tesseract-ocr tesseract-ocr-eng
+
+⚙️ Environment Variables
+
+Create a file called .env inside the Backend folder (or copy from .env.example):
+
+cd Backend
+copy .env.example .env   # Windows
+# or
+cp .env.example .env     # macOS/Linux
+
+
+Edit .env and set the following values:
+
 ENV=development
 PORT=8000
-# If running locally (non-Docker) and you installed Tesseract yourself:
-# On Windows, set to the tessdata folder you installed (adjust path)
-# TESSDATA_PREFIX=C:\Program Files\Tesseract-OCR\tessdata
-# On Linux/macOS:
-# TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00/tessdata
 
 
-Docker images already include tesseract-ocr + eng, so TESSDATA_PREFIX is not required in Docker.
+If you’re running locally and installed Tesseract manually, set the TESSDATA_PREFIX variable:
 
-🐍 Run backend (local, with venv)
-# from repo root
+🪟 On Windows
+TESSDATA_PREFIX=C:\Program Files\Tesseract-OCR\tessdata
+
+🐧 On Linux/macOS
+TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00/tessdata
+
+
+🧱 Docker users:
+The Docker image already includes Tesseract OCR + English language data, so TESSDATA_PREFIX isn’t required in Docker.
+
+▶️ Run Backend (local with venv)
 cd Backend
 python -m venv venv
-
-# Windows
-.\venv\Scripts\activate
-# macOS/Linux
-# source venv/bin/activate
-
+.\venv\Scripts\activate    # Windows
+# or
+source venv/bin/activate   # macOS/Linux
 pip install -r requirements.txt
-
-# start FastAPI (hot reload)
 uvicorn app.main:app --reload --port 8000
 
-
-Open docs: http://localhost:8000/docs
-
-🌐 Run frontend (local)
-# from repo root
+▶️ Run Frontend
 cd Frontend/contractiq
 npm install
 npm run dev
 
 
-Open app: http://localhost:3000
-
-🐳 Run everything with Docker (recommended)
-# from repo root (where docker-compose.yml lives)
-docker compose up --build
-
-
-Backend → http://localhost:8000/docs
-
-Frontend → http://localhost:3000
-
-For live reload in dev, the compose file mounts your code. Edit files locally and the servers refresh.
-
-📤 Use the API directly (OCR + clause analysis)
-1) Extract text from a PDF/image
-# replace sample.pdf with your file
-curl -X POST "http://localhost:8000/extract" \
-  -F "file=@sample.pdf"
-
-
-Response (example):
-
-{
-  "pages": 3,
-  "text": "…full extracted text…"
-}
-
-2) Analyze clauses and risk
-curl -X POST "http://localhost:8000/analyze" \
-  -H "Content-Type: application/json" \
-  -d '{ "text": "Paste the contract text here" }'
-
-
-Response (example):
-
-{
-  "avg_risk": 2.1,
-  "clauses": [
-    {
-      "title": "Indemnification",
-      "risk": 8,
-      "summary": "You may be liable for third-party damages.",
-      "snippet": "…"
-    },
-    {
-      "title": "Termination",
-      "risk": 6,
-      "summary": "Other party can terminate with short notice.",
-      "snippet": "…"
-    }
-  ]
-}
-
-
-In the UI, you can upload a file, see extracted text, sort by risk, and filter by min/max risk score.
-
-🔎 Typical workflow
-
-Upload contract (PDF/image) in the web app → backend does OCR (Tesseract + PyMuPDF).
-
-Clause detection runs → risky clauses flagged and scored 1–10.
-
-Review results → sort/filter by risk, click clauses to see the original snippet.
-
-Export → copy or download the results report from the UI.
-
-🧰 Troubleshooting
-
-“Form data requires python-multipart”
-Add to Backend/requirements.txt and reinstall:
-
-python-multipart
-
-
-Then restart uvicorn (or docker compose build api --no-cache && docker compose up).
-
-Module not found: pydantic_settings
-Add to Backend/requirements.txt:
-
-pydantic-settings>=2.2
-
-
-Reinstall and restart.
-
-ASGI app not found
-Make sure you start with:
-
-uvicorn app.main:app --reload
-
-
-and that Backend/app/__init__.py exists (can be empty).
-
-Tesseract not found (local, non-Docker)
-Install Tesseract and set TESSDATA_PREFIX in .env to your tessdata directory.
-On Windows, Tesseract usually installs here:
-
-C:\Program Files\Tesseract-OCR\tessdata
-
-🧪 Quick test (end-to-end)
-
-Start backend + frontend (venv or Docker).
-
-Visit http://localhost:3000
-
-Upload a small PDF (e.g., a one-page lease).
-
-Click Analyze Clauses → you should see risk scores and summaries.
+Open the app in your browser:
+👉 http://localhost:3000
 
