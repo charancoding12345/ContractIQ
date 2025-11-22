@@ -50,75 +50,86 @@ This tool is built for:
 - GitHub Actions (for CI/CD)  
 - Python 3.11+
 
----
+:
 
-🧰 Prerequisites
+🧩 Prerequisites
 
-Node 18+ (for the frontend)
+Before running ContractIQ, make sure you have the following installed:
 
-Tesseract OCR (skip this if you’re using Docker)
+System Requirements
 
-⚙️ Install Tesseract manually only for local (non-Docker) setups
+Python 3.11+ — for the backend (FastAPI)
 
-Windows
+Node.js 18+ — for the frontend (Next.js)
 
-Install Tesseract from https://github.com/UB-Mannheim/tesseract/wiki
-# Then add tesseract.exe to your PATH
+Tesseract OCR — used for text extraction
+(Skip if you plan to run with Docker — it’s preinstalled inside the container)
 
+🧱 Installing Tesseract OCR (Local Only)
+🪟 Windows
 
-macOS
+Download the Windows installer from the official Tesseract repo:
+👉 Tesseract for Windows (UB Mannheim Build)
 
+Run the installer and add tesseract.exe to your system PATH.
+🍎 macOS
 brew install tesseract
+🐧 Linux (Ubuntu/Debian)
+sudo apt update
+sudo apt install tesseract-ocr tesseract-ocr-eng
+⚙️ Environment Variables Setup
 
+ContractIQ uses an .env file in the Backend directory to configure runtime settings.
 
-Linux (Ubuntu/Debian)
-
-sudo apt-get update
-sudo apt-get install tesseract-ocr tesseract-ocr-eng
-
-⚙️ Environment Variables
-
-Create a file called .env inside the Backend folder (or copy from .env.example):
-
+Step 1: Create the .env file
 cd Backend
-copy .env.example .env   # Windows
+copy .env.example .env    # On Windows
 # or
-cp .env.example .env     # macOS/Linux
+cp .env.example .env      # On macOS/Linux
+Step 2: Edit your .env file
 
-
-Edit .env and set the following values:
-
+Here’s a minimal example configuration:
 ENV=development
 PORT=8000
 
+Step 3: Add Tesseract path (if running locally)
 
-If you’re running locally and installed Tesseract manually, set the TESSDATA_PREFIX variable:
+If you installed Tesseract manually, you need to specify where its tessdata files are stored.
 
-🪟 On Windows
+🪟 Windows
 TESSDATA_PREFIX=C:\Program Files\Tesseract-OCR\tessdata
-
-🐧 On Linux/macOS
+🐧 Linux/macOS
 TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00/tessdata
+💡 Note:
+You don’t need to set TESSDATA_PREFIX when using Docker — it’s already preconfigured in the image.
 
-
-🧱 Docker users:
-The Docker image already includes Tesseract OCR + English language data, so TESSDATA_PREFIX isn’t required in Docker.
-
-▶️ Run Backend (local with venv)
+▶️ Running the Backend (Local, with venv)
 cd Backend
 python -m venv venv
-.\venv\Scripts\activate    # Windows
+.\venv\Scripts\activate     # Windows
 # or
-source venv/bin/activate   # macOS/Linux
+source venv/bin/activate    # macOS/Linux
+
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
-
-▶️ Run Frontend
+Backend will start on:
+👉 http://localhost:8000/docs
+▶️ Running the Frontend
 cd Frontend/contractiq
 npm install
 npm run dev
-
-
-Open the app in your browser:
+Frontend will start on:
 👉 http://localhost:3000
+
+🐳 Running Everything with Docker
+
+If you have Docker installed, you can start both frontend and backend together:
+docker compose up --build
+
+Backend → http://localhost:8000
+
+Frontend → http://localhost:3000
+
+🧱 Docker images already include tesseract-ocr and tesseract-ocr-eng,
+so no manual setup is needed.
 
