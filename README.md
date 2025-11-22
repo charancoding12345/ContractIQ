@@ -54,7 +54,7 @@ This tool is built for:
 
 🧠 Setup Guide
 🗂️ Directory Structure
-bash
+```bash
 ContractIQ/
 │
 ├── Backend/                        # FastAPI backend for OCR & clause analysis
