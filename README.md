@@ -52,99 +52,26 @@ This tool is built for:
 
 :
 
-🧾 ContractIQ — Setup Guide
-📁 Directory Structure
+🧠 Setup Guide
+🗂️ Directory Structure
 ContractIQ/
 │
-├── Backend/                    # FastAPI backend for OCR & clause analysis
+├── Backend/                        # FastAPI backend for OCR & clause analysis
 │   ├── app/
-│   │   ├── main.py             # API entry point
-│   │   ├── clause_analysis/    # Clause risk detection logic
-│   │   ├── ocr/                # OCR extraction (Tesseract + PyMuPDF)
-│   │   └── utils/              # Helper functions
-│   ├── requirements.txt        # Python dependencies
-│   ├── Dockerfile              # Backend Docker config
-│   ├── .env.example            # Example environment file
-│   └── tests/                  # Unit & integration tests
+│   │   ├── main.py                 # API entry point
+│   │   ├── clause_analysis/        # Clause detection & risk scoring
+│   │   ├── ocr/                    # OCR text extraction (Tesseract + PyMuPDF)
+│   │   └── utils/                  # Helper utilities
+│   ├── requirements.txt            # Python dependencies
+│   ├── Dockerfile                  # Backend Docker config
+│   ├── .env.example                # Example environment config
+│   └── tests/                      # Backend test suite
 │
 ├── Frontend/
-│   └── contractiq/             # Next.js + Tailwind frontend
-│       ├── pages/              # Routes
-│       ├── components/         # UI components
-│       ├── public/             # Static assets
-│       └── package.json        # Frontend dependencies
+│   └── contractiq/                 # Next.js + TailwindCSS frontend
+│       ├── pages/                  # App routes
+│       ├── components/             # UI components
+│       ├── public/                 # Static assets
+│       └── package.json            # Frontend dependencies
 │
-└── docker-compose.yml          # Combined full-stack setup
-
-⚙️ Backend Setup
-1️⃣ Install Dependencies
-cd Backend
-python -m venv venv
-.\venv\Scripts\activate     # Windows
-# or
-source venv/bin/activate    # macOS/Linux
-
-pip install -r requirements.txt
-
-2️⃣ Configure Environment
-
-Copy the example .env file:
-
-cp .env.example .env    # macOS/Linux
-# or
-copy .env.example .env  # Windows
-
-
-Then edit .env as needed:
-
-ENV=development
-PORT=8000
-
-
-If running locally and you installed Tesseract manually:
-
-Windows
-
-TESSDATA_PREFIX=C:\Program Files\Tesseract-OCR\tessdata
-
-
-Linux/macOS
-
-TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00/tessdata
-
-
-⚠️ Docker users: skip this — Tesseract is already installed in the image.
-
-3️⃣ Run the Server
-uvicorn app.main:app --reload --port 8000
-
-
-✅ Backend running at:
-
-REST API → http://localhost:8000
-
-Docs → http://localhost:8000/docs
-
-💻 Frontend Setup
-1️⃣ Install Dependencies
-cd Frontend/contractiq
-npm install
-
-2️⃣ Run the Dev Server
-npm run dev
-
-
-✅ Frontend running at:
-http://localhost:3000
-
-🐳 Docker Setup (Full Stack)
-1️⃣ Build and Run
-docker compose up --build
-
-2️⃣ Access
-
-Backend: http://localhost:8000/docs
-
-Frontend: http://localhost:3000
-
-Docker automatically handles dependencies (Python, Node, and Tesseract).
+└── docker-compose.yml              # Combined full-stack configuration
