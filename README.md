@@ -50,9 +50,9 @@ This tool is built for:
 - GitHub Actions (for CI/CD)  
 - Python 3.11+
 
-:
+---
 
-🧠 Setup Guide
+🧾 Setup Guide
 
 🗂️ Directory Structure
 ```bash
@@ -95,4 +95,67 @@ pip install -r requirements.txt
 2️⃣ Configure Environment
 
 Copy the example environment file:
+```bash
+# macOS/Linux
+cp .env.example .env
+# Windows
+copy .env.example .env
+```
+Then open .env and edit:
+``` ini
+ENV=development
+PORT=8000
+```
+If you installed Tesseract manually (non-Docker):
 
+Windows
+```ini
+TESSDATA_PREFIX=C:\Program Files\Tesseract-OCR\tessdata
+```
+Linux/macOS
+```bash
+TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00/tessdata
+```
+⚠️ Note:
+Docker images already include Tesseract OCR + English language data,
+so you can skip this step when running inside Docker.
+
+3️⃣ Run the Server
+``` bash
+uvicorn app.main:app --reload --port 8000
+```
+Backend running at:
+
+ - REST API → http://localhost:8000
+
+ - Docs → http://localhost:8000/docs
+
+💻 Frontend Setup
+
+1️⃣ Install Dependencies
+```bash
+cd Frontend/contractiq
+npm install
+```
+2️⃣ Run the Dev Server
+``` bash
+npm run dev
+```
+Frontend running at:
+http://localhost:3000
+
+🐳 Docker Setup (Full Stack)
+
+1️⃣ Build and Run
+```bash
+docker compose up --build
+```
+
+2️⃣ Access
+
+Backend: http://localhost:8000/docs
+
+Frontend: http://localhost:3000
+
+Docker automatically installs and configures all dependencies
+— no manual setup or Tesseract path required.
