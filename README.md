@@ -77,3 +77,20 @@ ContractIQ/
 │       └── package.json            # Frontend dependencies
 │
 └── docker-compose.yml              # Combined full-stack configuration
+
+```
+
+⚙️ Backend Setup
+1️⃣ Install Dependencies
+```bash
+cd Backend
+python -m venv venv
+.\venv\Scripts\activate     # Windows
+# or
+source venv/bin/activate    # macOS/Linux
+pip install -r requirements.txt
+```
+
+2️⃣ Configure Environment
+Copy the example environment file:
+
