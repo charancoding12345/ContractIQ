@@ -81,6 +81,7 @@ ContractIQ/
 ```
 
 ⚙️ Backend Setup
+
 1️⃣ Install Dependencies
 ```bash
 cd Backend
@@ -92,5 +93,6 @@ pip install -r requirements.txt
 ```
 
 2️⃣ Configure Environment
+
 Copy the example environment file:
 
